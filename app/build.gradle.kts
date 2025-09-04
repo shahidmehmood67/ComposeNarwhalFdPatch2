@@ -9,10 +9,11 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.cit.mycomposeapplication"
+//        applicationId = "com.cit.mycomposeapplication"
+        applicationId = "android.a.com.cit.mycomposeapplication"
         minSdk = 21
         targetSdk = 36
-        versionCode = 1
+        versionCode = 10000
         versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -62,4 +63,14 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+
+    // Pager (official foundation pager)
+    implementation("androidx.compose.foundation:foundation:1.9.0")
+// Lifecycle / ViewModel + Coroutines
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
+
+    // Play Core
+    implementation("com.google.android.play:asset-delivery-ktx:2.2.2")
 }
