@@ -3,4 +3,16 @@
     <string name="title_activity_quran_page_read">QuranPageReadActivity</string>
 
     <string name="app_folder_path" translatable="false">/al_quran_data</string>
+    <string name="title_activity_main_dash_board">MainActivityDashBoard</string>
+    <string name="next_prayer_is">Next Prayer is</string>
+    <string name="at">at</string>
+    <string name="remaining_time">Remaining time</string>
+
+    <string name="fajar">Fajr</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="dhuhr">Dhuhr</string>
+    <string name="asr">Asr</string>
+    <string name="maghrib">Maghrib</string>
+    <string name="isha">Isha</string>
+
 </resources>

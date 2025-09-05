@@ -7,4 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!--    new-->
+    <color name="bgtobarcolorfajr">#B7C6F1</color>
+    <color name="bgtobarcolorzuhar">#8DEAF1</color>
+    <color name="bgtobarcolorasar">#9BC7CE</color>
+    <color name="bgtobarcolormagrib">#2E2E62</color>
+    <color name="bgtobarcolorisha">#394756</color>
 </resources>
