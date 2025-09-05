@@ -12,7 +12,7 @@ import com.cit.mycomposeapplication.models.AudioCommand
 import com.cit.mycomposeapplication.models.AyaRect
 import com.cit.mycomposeapplication.models.HighlightCommand
 import com.cit.mycomposeapplication.repository.QuranRepository
-import com.cit.mycomposeapplication.utils.Constants.SCRIPT_USMANI
+import com.cit.mycomposeapplication.utils.ConstantsKT.SCRIPT_USMANI
 import com.cit.mycomposeapplication.utils.FilenameUtils
 import com.google.android.play.core.assetpacks.AssetPackManagerFactory
 import kotlinx.coroutines.Dispatchers

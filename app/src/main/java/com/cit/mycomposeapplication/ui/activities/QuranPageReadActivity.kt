@@ -1,13 +1,9 @@
-package com.cit.mycomposeapplication
+package com.cit.mycomposeapplication.ui.activities
 
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -21,7 +17,7 @@ import com.cit.mycomposeapplication.composable.QuranReaderApp
 import com.cit.mycomposeapplication.models.AudioCommand
 import com.cit.mycomposeapplication.repository.AndroidQuranRepository
 import com.cit.mycomposeapplication.ui.theme.MyComposeApplicationTheme
-import com.cit.mycomposeapplication.utils.Constants.SCRIPT_INDOPAK
+import com.cit.mycomposeapplication.utils.ConstantsKT.SCRIPT_INDOPAK
 import com.cit.mycomposeapplication.viewmodel.QuranViewModel
 import java.io.File
 
@@ -52,11 +48,12 @@ class QuranPageReadActivity : ComponentActivity() {
 
                         if (assetPath == null) {
                             Log.d("QuranPageReadActivity", "if checkDownload: Path is null")
-                        }
+                        }else{
+                            val assetDir = File(assetPath)
+                            if (!assetDir.exists() || assetDir.listFiles().isNullOrEmpty()) {
+                                Log.d("QuranPageReadActivity", "if checkDownload: Directory does not exist or is empty")
+                            }
 
-                        val assetDir = File(assetPath)
-                        if (!assetDir.exists() || assetDir.listFiles().isNullOrEmpty()) {
-                            Log.d("QuranPageReadActivity", "if checkDownload: Directory does not exist or is empty")
                         }
 
                         viewModel.setAssetPath( assetPath ?: "")

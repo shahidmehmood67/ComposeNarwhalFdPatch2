@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:name=".QuranApplication"
         android:allowBackup="true"
@@ -13,12 +18,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyComposeApplication">
         <activity
-            android:name=".QuranPageReadActivity"
+            android:name=".ui.activities.MainActivityDashBoard"
+            android:exported="false"
+            android:label="@string/title_activity_main_dash_board"
+            android:theme="@style/Theme.MyComposeApplication" />
+        <activity
+            android:name=".ui.activities.QuranPageReadActivity"
             android:exported="false"
             android:label="@string/title_activity_quran_page_read"
             android:theme="@style/Theme.MyComposeApplication" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activities.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.MyComposeApplication">

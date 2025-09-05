@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
 //        applicationId = "com.cit.mycomposeapplication"
-        applicationId = "android.a.com.cit.mycomposeapplication"
+        applicationId = "abcdefg.a.com.cit.mycomposeapplication"
         minSdk = 21
         targetSdk = 36
         versionCode = 10000
@@ -70,6 +70,14 @@ dependencies {
 // Lifecycle / ViewModel + Coroutines
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2")
+
+    implementation("androidx.compose.runtime:runtime-livedata:1.8.3")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.2")
+
+    implementation("com.google.android.gms:play-services-location:21.2.0")
+
 
     // Play Core
     implementation("com.google.android.play:asset-delivery-ktx:2.2.2")
