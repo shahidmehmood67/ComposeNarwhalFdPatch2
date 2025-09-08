@@ -61,7 +61,8 @@ class QuranPageReadActivity : ComponentActivity() {
                     }
                 }
             }
-        } else {
+        }
+        else {
             // configure VM: asset path + total pages (example)
             val assetPath = viewModel.getAbsoluteAssetPathArg(SCRIPT_INDOPAK)
 

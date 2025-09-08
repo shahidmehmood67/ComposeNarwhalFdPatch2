@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.10"
 }
 
 android {
@@ -65,6 +66,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
 
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.1")
+
     // Pager (official foundation pager)
     implementation("androidx.compose.foundation:foundation:1.9.0")
 // Lifecycle / ViewModel + Coroutines
@@ -78,7 +81,19 @@ dependencies {
 
     implementation("com.google.android.gms:play-services-location:21.2.0")
 
+    // Ktor Core
+    implementation("io.ktor:ktor-client-core:2.0.0")
+//    implementation("io.ktor:ktor-client-cio:2.0.0")
+    implementation("io.ktor:ktor-client-okhttp:2.0.0")
+    
+    // JSON Serialization
+    implementation("io.ktor:ktor-client-content-negotiation:2.0.0")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 
     // Play Core
     implementation("com.google.android.play:asset-delivery-ktx:2.2.2")
+
+    // Others
+    implementation("com.airbnb.android:lottie:6.4.0")
 }

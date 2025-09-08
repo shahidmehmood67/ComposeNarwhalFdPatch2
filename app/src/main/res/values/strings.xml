@@ -14,5 +14,26 @@
     <string name="asr">Asr</string>
     <string name="maghrib">Maghrib</string>
     <string name="isha">Isha</string>
+    <string name="ayatofday">Ayat of the day</string>
 
+    <string name="saheeh_international">Saheeh International</string>
+    <string name="english_transliteration">English Transliteration</string>
+    <string name="frank_bubenheim">Frank Bubenheim</string>
+    <string name="noor_international">Noor International</string>
+    <string name="islamhouse">IslamHouse</string>
+    <string name="rashid_maash">Rashid Maash</string>
+    <string name="maulana_azizul_haque">Maulana Azizul Haque</string>
+    <string name="hamza_roberto_piccardo">Hamza Roberto Piccardo</string>
+    <string name="diyanet_isleri">Diyanet Isleri</string>
+    <string name="maulana_muhammad_junagarhi">Maulana Muhammad Junagarhi</string>
+    <string name="bayaan_foundation">Bayaan Foundation</string>
+    <string name="abubakar_mahmoud_gumi">Abubakar Mahmoud Gumi</string>
+    <string name="islamic_ministry">Islamic Ministry</string>
+    <string name="abdullah_muhammad_basmeih">Abdullah Muhammad Basmeih</string>
+    <string name="helmi_nasr">Helmi Nasr</string>
+    <string name="mahmud_muhammad_abduh">Mahmud Muhammad Abduh</string>
+    <string name="viewmore">View More</string>
+    <string name="see_translation">See Translation</string>
+    <string name="tasbeehofday">Tasbeeh of the day</string>
+    <string name="chat_with_desc">Chat with Ai Aalim (Beta)</string>
 </resources>

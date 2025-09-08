@@ -13,6 +13,7 @@ import com.cit.mycomposeapplication.models.AyaRect
 import com.cit.mycomposeapplication.models.Page
 import com.cit.mycomposeapplication.models.Quarter
 import com.cit.mycomposeapplication.models.QuarterPage
+import com.cit.mycomposeapplication.models.Reader
 import com.cit.mycomposeapplication.models.Sora
 import com.cit.mycomposeapplication.utils.AppConstants
 import com.cit.mycomposeapplication.utils.DisplayInfoUtil.adjustVertical
@@ -1389,6 +1390,39 @@ class DatabaseAccess(private val context: Context)
             getTouchedAyaIndoPak(pageNumber ,positionX , positionY)
         }
     }
+
+    val allReaders: List<Reader>
+        /**
+         * Function to get all readers
+         *
+         * @return All reader info
+         */
+        get() {
+            val readers: MutableList<Reader> = ArrayList()
+            return try {
+                val db = openDB(MAIN_DATABASE)
+                val sql = "select * from audio ; "
+                val cursor = db!!.rawQuery(sql, null)
+                cursor.moveToFirst()
+                while (!cursor.isAfterLast) {
+                    readers.add(
+                        Reader(
+                            cursor.getInt(0),
+                            cursor.getString(1),
+                            cursor.getString(2),
+                            cursor.getInt(3),
+                            cursor.getString(4)
+                        )
+                    )
+                    cursor.moveToNext()
+                }
+                cursor.close()
+                closeDB(db)
+                readers
+            } catch (e: Exception) {
+                readers
+            }
+        }
 
 
     /**

@@ -26,16 +26,30 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.cit.mycomposeapplication.composable.MainHeader
 import com.cit.mycomposeapplication.models.ButtonType
 import com.cit.mycomposeapplication.models.PrayerUiState
+import com.cit.mycomposeapplication.models.Reader
+import com.cit.mycomposeapplication.repository.AndroidQuranRepository
 import com.cit.mycomposeapplication.ui.activities.ui.theme.MyComposeApplicationTheme
 import com.cit.mycomposeapplication.utils.AppSettings
+import com.cit.mycomposeapplication.utils.ConstantsKT.SCRIPT_INDOPAK
+import com.cit.mycomposeapplication.viewmodel.AyahViewModel
 import com.cit.mycomposeapplication.viewmodel.LocationViewModel
+import com.cit.mycomposeapplication.viewmodel.QuranViewModel
+import com.cit.mycomposeapplication.viewmodel.ReciterViewModel
+import java.io.File
 
 class MainActivityDashBoard : ComponentActivity() {
 
     private val locationViewModel: LocationViewModel by viewModels()
+
+    private val viewModelAyah: AyahViewModel by viewModels()
+    private val viewModelReciters: ReciterViewModel by viewModels()
+    private lateinit var viewModelDB: QuranViewModel
+
 
     private val REQUEST_LOCATION_PERM = 115
 
@@ -52,6 +66,18 @@ class MainActivityDashBoard : ComponentActivity() {
             requestLocationpermission()
         }
 
+        val repo = AndroidQuranRepository(applicationContext)
+        viewModelDB = ViewModelProvider(this, object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                @Suppress("UNCHECKED_CAST")
+                return QuranViewModel(repo, applicationContext) as T
+            }
+        })[QuranViewModel::class.java]
+
+        checkCopyDB()
+        viewModelAyah.fetchAyah()
+//        viewModelAyah.initGetTasbeehDaily()
+
 
         setContent {
             MyComposeApplicationTheme {
@@ -63,7 +89,11 @@ class MainActivityDashBoard : ComponentActivity() {
                     ) {
                         MainHeader(
                             locationViewModel = locationViewModel,
-                            onButtonClick = ::handleButtonClick
+                            ayahViewModel = viewModelAyah,
+                            reciterViewModel = viewModelReciters,
+                            onButtonClick = ::handleButtonClick,
+                            onReciterClick = ::handleRecitersClick,
+                            onSendMessage =  ::handleClick
                         )
                     }
                 }
@@ -72,6 +102,7 @@ class MainActivityDashBoard : ComponentActivity() {
     }
 
     private fun handleButtonClick(buttonType: ButtonType) {
+        Log.d("MainActivityDashBoard", "handleButtonClick: (82) $buttonType");
         when (buttonType) {
             ButtonType.ALQURAN -> gotoActivity(buttonType)
             ButtonType.QIBLA -> gotoActivity(buttonType)
@@ -82,7 +113,19 @@ class MainActivityDashBoard : ComponentActivity() {
             ButtonType.HAJJ_UMRAH -> gotoActivity(buttonType)
             ButtonType.MASJID -> gotoActivity(buttonType)
             ButtonType.NAMES_NABI -> gotoActivity(buttonType)
+            ButtonType.CARD_AYAH -> gotoActivity(buttonType)
+            ButtonType.CARD_TASBEEH -> gotoActivity(buttonType)
         }
+    }
+
+    private fun handleRecitersClick(reader: Reader) {
+        Log.d("MainActivityDashBoard", "handleRecitersClick: (104) $reader");
+        gotoActivity()
+    }
+
+    private fun handleClick() {
+        Log.d("MainActivityDashBoard", "handleRecitersClick: (127)");
+        gotoActivity()
     }
 
     fun gotoActivity(buttonType: ButtonType) {
@@ -90,6 +133,10 @@ class MainActivityDashBoard : ComponentActivity() {
         startActivity(intent)
     }
 
+    fun gotoActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+    }
 
     private fun observeUserLocation() {
         locationViewModel.userLocation.observe(this) { location ->
@@ -105,6 +152,35 @@ class MainActivityDashBoard : ComponentActivity() {
             else{
 
             }
+        }
+    }
+
+    private fun checkCopyDB(){
+        if (viewModelDB.isDatabaseAlreadyCopied().not()) {
+            Log.e("QuranPageReadActivity", "if Database not found. Copying now...")
+            viewModelDB.copyDatabase { success ->
+                viewModelDB.copyDatabasePages { success ->
+                    viewModelDB.copyDatabasePagesIndopak { success ->
+                        // configure VM: asset path + total pages (example)
+                        val assetPath = viewModelDB.getAbsoluteAssetPathArg(SCRIPT_INDOPAK)
+
+                        if (assetPath == null) {
+                            Log.d("QuranPageReadActivity", "if checkDownload: Path is null")
+                        }else{
+                            val assetDir = File(assetPath)
+                            if (!assetDir.exists() || assetDir.listFiles().isNullOrEmpty()) {
+                                Log.d("QuranPageReadActivity", "if checkDownload: Directory does not exist or is empty")
+                            }
+
+                        }
+
+                        viewModelReciters.loadReciters(this)
+                    }
+                }
+            }
+        }
+        else {
+            viewModelReciters.loadReciters(this)
         }
     }
 
@@ -254,7 +330,9 @@ fun GreetingPreview3() {
                 override val uiState = MutableLiveData(fakeUiState)
                 override val locationLiveData = MutableLiveData(fakeLocation)
             },
-            onButtonClick = {}
+            onButtonClick = {},
+            onReciterClick = {},
+            onSendMessage = {}
         )
     }
 }

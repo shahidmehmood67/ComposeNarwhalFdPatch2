@@ -11,5 +11,7 @@ data class ButtonData(
 enum class ButtonType {
     ALQURAN, QIBLA, TASBEEH,
     AZKAR, PRAYERS, CALENDAR,
-    HAJJ_UMRAH, MASJID, NAMES_NABI
+    HAJJ_UMRAH, MASJID, NAMES_NABI,
+
+    CARD_AYAH, CARD_TASBEEH
 }
