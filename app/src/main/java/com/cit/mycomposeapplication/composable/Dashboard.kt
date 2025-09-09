@@ -1,6 +1,15 @@
 package com.cit.mycomposeapplication.composable
 
+import android.content.Context
+import android.os.Build
 import android.util.Log
+import android.view.View
+import android.view.WindowInsetsController
+import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
+import androidx.activity.compose.LocalActivity
+import androidx.activity.enableEdgeToEdge
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import com.cit.mycomposeapplication.R
@@ -19,6 +28,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -26,21 +36,31 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Gray
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cit.mycomposeapplication.database.AyahUiState
 import com.cit.mycomposeapplication.models.ButtonData
@@ -52,6 +72,7 @@ import com.cit.mycomposeapplication.ui.theme.*
 import com.cit.mycomposeapplication.ui.theme.PrimaryDarkGreen
 import com.cit.mycomposeapplication.utils.HtmlText
 import com.cit.mycomposeapplication.utils.sdp
+import com.cit.mycomposeapplication.utils.ssp
 import com.cit.mycomposeapplication.viewmodel.AyahViewModel
 import com.cit.mycomposeapplication.viewmodel.LocationViewModel
 import com.cit.mycomposeapplication.viewmodel.ReciterViewModel
@@ -62,6 +83,13 @@ val Montserrat = FontFamily(
     Font(R.font.montserratmedium, weight = FontWeight.Medium),
     Font(R.font.montserratsemibold, weight = FontWeight.SemiBold),
     Font(R.font.montserratbold, weight = FontWeight.Bold)
+)
+
+val Poppins = FontFamily(
+    Font(R.font.poppinsregular, weight = FontWeight.Normal),
+    Font(R.font.poppinsmedium, weight = FontWeight.Medium),
+    Font(R.font.poppinssemibold, weight = FontWeight.SemiBold),
+    Font(R.font.poppinsbold, weight = FontWeight.Bold)
 )
 
 val majeedFont = FontFamily(
@@ -81,6 +109,46 @@ fun MainHeader(
     val uiState by locationViewModel.uiState.observeAsState(PrayerUiState())
     val locationText by locationViewModel.locationLiveData.observeAsState("")
     Log.d("Dashboard", "MainHeader: (303) locationText $locationText");
+
+    val context = LocalContext.current
+
+    // Apply status bar color - Modern approach
+    LaunchedEffect(uiState.statusBarColor) {
+        uiState.statusBarColor?.let { color2 ->
+            val activity = context as? ComponentActivity
+            val color = color2.toArgb()
+            Log.d("", "MainHeader: (112) color2 $color2");
+            Log.d("", "MainHeader: (112) color $color");
+
+            activity?.let {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    it.window.statusBarColor = color
+                    val controller = it.window.decorView.windowInsetsController
+                    if (isColorLight(color)) {
+                        controller?.setSystemBarsAppearance(
+                            WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                            WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                        )
+                    } else {
+                        controller?.setSystemBarsAppearance(
+                            0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                        )
+                    }
+                } else {
+                    // Fallback for API < 30
+                    it.window.statusBarColor = color
+                    @Suppress("DEPRECATION")
+                    val flags = it.window.decorView.systemUiVisibility
+                    it.window.decorView.systemUiVisibility = if (isColorLight(color)) {
+                        flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                    } else {
+                        flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+                    }
+                }
+            }
+        }
+    }
+
 
     val firstRowButtons = listOf(
         ButtonData(ButtonType.ALQURAN, R.drawable.iconquran, "Al-Quran"),
@@ -114,7 +182,7 @@ fun MainHeader(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
+                .height(180.sdp())
         ) {
 
             // 🔹 Background image (WEBP or PNG/JPG)
@@ -146,87 +214,112 @@ fun MainHeader(
                 modifier = Modifier
                     .fillMaxWidth(),
             ) {
-//                 Location
-//                Text(
-//                    text = locationText ?: "null",
-//                    style = MaterialTheme.typography.bodyMedium.copy(
-//                        fontWeight = FontWeight.Bold,
-//                        color = if (uiState.isBlack) Color.Black else Color.White
-//                    )
-//                )
 
                 HeaderTopRow(locationText ?: "null",uiState, onSendMessage, onSendMessage , R.raw.crownanim)
 
+                Spacer(modifier = Modifier.height(20.sdp()))
 
-                Spacer(modifier = Modifier.height(8.dp))
 
-                // 🙏 Next prayer
-                Text(
-                    text = stringResource(id = R.string.next_prayer_is),
-                    style = MaterialTheme.typography.bodySmall.copy(
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 14.dp, vertical = 4.dp)
+                ) {
+                    // Next prayer
+                    Text(
+                        text = stringResource(id = R.string.next_prayer_is),
+                        fontFamily = Poppins,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 12.ssp(),
                         color = if (uiState.isBlack) Color.Black else Color.White
                     )
-                )
 
-                Text(
-                    text = uiState.nextPrayerName,
-                    style = MaterialTheme.typography.headlineSmall.copy(
-                        fontWeight = FontWeight.Bold,
-                        color = if (uiState.isBlack) Color.Black else Color.White
-                    )
-                )
-
-                Text(
-                    text = uiState.nextPrayerTime,
-                    style = MaterialTheme.typography.bodyMedium.copy(
+                    Text(
+                        text = uiState.nextPrayerName,
+                        fontFamily = Poppins,
                         fontWeight = FontWeight.SemiBold,
+                        fontSize = 30.ssp(),
                         color = if (uiState.isBlack) Color.Black else Color.White
                     )
-                )
 
-                Spacer(modifier = Modifier.height(4.dp))
-
-                // ⏳ Remaining time
-                Text(
-                    text = stringResource(id = R.string.remaining_time),
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        color = if (uiState.isBlack) Color.Black else Color.White
+                    // Remaining time
+                    Text(
+                        text = stringResource(id = R.string.remaining_time),
+                        color = if (uiState.isBlack) Color.Black else Color.White,
+                        style = TextStyle(
+                            fontFamily = Poppins,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 12.ssp(),
+                            lineHeight = 13.ssp(),
+                            lineHeightStyle = LineHeightStyle(
+                                alignment = LineHeightStyle.Alignment.Center,
+                                trim = LineHeightStyle.Trim.Both // works like includeFontPadding=false
+                            )
+                        ),
+                        modifier = Modifier.padding(start = 2.sdp())
                     )
-                )
 
-                Text(
-                    text = uiState.remainingTime,
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontWeight = FontWeight.Bold,
-                        color = if (uiState.isBlack) Color.Black else Color.White
+                    Text(
+                        text = uiState.remainingTime,
+                        color = if (uiState.isBlack) Color.Black else Color.White,
+                        style = LocalTextStyle.current.copy(
+                            fontFamily = Poppins,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 12.ssp(),
+                            lineHeight = 13.ssp(),
+                            lineHeightStyle = LineHeightStyle(
+                                alignment = LineHeightStyle.Alignment.Center,
+                                trim = LineHeightStyle.Trim.Both // removes extra top/bottom spacing (like includeFontPadding=false)
+                            ),
+                            shadow = Shadow(
+                                color = BlackDim,
+                                offset = Offset(0f, 0f),
+                                blurRadius = 1f
+                            )
+                        ),
+                        modifier = Modifier.padding(start = 2.sdp())
                     )
-                )
-
+                }
             }
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+
+        Spacer(modifier = Modifier.height(9.sdp()))
 
         AiPromptBar(
             onClick = onSendMessage
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .height(5.sdp())
+            .background(White))
+
 
         // First Row of buttons
-        ButtonRow(buttons = firstRowButtons, onClick = onButtonClick)
+        ButtonRow(buttons = firstRowButtons,  rowBackgroundColor = Blue, onClick = onButtonClick)
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .height(12.sdp())
+            .background(White))
 
         // Second Row of buttons
-        ButtonRow(buttons = secondRowButtons, onClick = onButtonClick)
+        ButtonRow(buttons = secondRowButtons, rowBackgroundColor = Orange, onClick = onButtonClick)
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .height(12.sdp())
+            .background(White)
+        )
 
         // Third Row of buttons
-        ButtonRow(buttons = thirdRowButtons, onClick = onButtonClick)
+        ButtonRow(buttons = thirdRowButtons,rowBackgroundColor = Greenish_Yellow, onClick = onButtonClick)
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .height(12.sdp())
+            .background(White))
 
         AyahCardSection(ayahViewModel, onButtonClick)
 
@@ -245,6 +338,27 @@ fun MainHeader(
     }
 }
 
+fun getColorHex(context: Context, @ColorRes colorRes: Int, includeAlpha: Boolean = true): String {
+    val colorInt = ContextCompat.getColor(context, colorRes)
+    return if (includeAlpha) {
+        String.format("#%08X", colorInt) // ARGB (#AARRGGBB)
+    } else {
+        String.format("#%06X", 0xFFFFFF and colorInt) // RGB (#RRGGBB)
+    }
+}
+
+// 4. Utility function to determine if color is light
+fun isColorLight(color: Int): Boolean {
+    val red = android.graphics.Color.red(color)
+    val green = android.graphics.Color.green(color)
+    val blue = android.graphics.Color.blue(color)
+
+    // Calculate luminance using the relative luminance formula
+    val luminance = (0.299 * red + 0.587 * green + 0.114 * blue) / 255
+    return luminance > 0.5
+}
+
+
 @Composable
 fun HeaderTopRow(
     locationText: String?,
@@ -256,13 +370,14 @@ fun HeaderTopRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 4.dp, vertical = 4.dp),
+            .padding(horizontal = 12.dp, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Menu Button
         IconButton(
             onClick = onMenuClick,
-            modifier = Modifier.size(width = 60.dp, height = 60.dp)
+            modifier = Modifier
+                .size(width = 30.dp, height = 30.dp)
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_drawer),
@@ -272,7 +387,7 @@ fun HeaderTopRow(
         }
 
 
-        Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = Modifier.width(24.dp))
 
         // Location Card
         Card(
@@ -309,10 +424,14 @@ fun HeaderTopRow(
 
                     Spacer(modifier = Modifier.width(6.dp))
 
+                    Log.d("", "HeaderTopRow: (314) locationText $locationText");
+
                     Text(
                         text = locationText ?: "Unknown",
                         color = if (uiState.isBlack) Color.Black else Color.White,
-                        fontSize = 11.sp,
+                        fontSize = 11.ssp(),
+                        fontFamily = Montserrat,
+                        fontWeight = FontWeight.Medium,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -336,11 +455,14 @@ fun HeaderTopRow(
         // Menu Button
         IconButton(
             onClick = onMenuClick,
-            modifier = Modifier.size(width = 40.dp, height = 55.dp)
+            modifier = Modifier
+                .size(width = 40.dp, height = 40.dp)
+                .clickable { onLocationClick() },
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_remove_ads),
                 contentDescription = "ads",
+                tint = Color.Unspecified
             )
         }
     }
@@ -363,19 +485,19 @@ fun AiPromptBar(
         Card(
             modifier = Modifier
                 .fillMaxWidth(0.9f)
-                .padding(vertical = 6.dp)
+                .padding(vertical = 6.sdp())
                 .clickable { onClick() }, // Main card click
             shape = RoundedCornerShape(12.dp),
-            elevation = CardDefaults.cardElevation(5.dp),
+            elevation = CardDefaults.cardElevation(3.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp)
+                modifier = Modifier.padding(horizontal = 10.sdp())
             ) {
                 Card(
                     shape = RoundedCornerShape(35.dp),
-                    border = BorderStroke(1.dp, PrimaryDarkGreen),
+                    border = BorderStroke(1.dp, Green_1),
                     modifier = Modifier
                         .weight(1f)
                         .height(46.dp), // card height
@@ -404,7 +526,7 @@ fun AiPromptBar(
                             painter = painterResource(id = R.drawable.ic_voice),
                             contentDescription = "Voice",
                             tint = PrimaryDarkGreen,
-                            modifier = Modifier.size(25.dp)
+                            modifier = Modifier.size(22.sdp())
                         )
                     }
                 }
@@ -415,7 +537,7 @@ fun AiPromptBar(
                 // Send button with gradient (unchanged)
                 Box(
                     modifier = Modifier
-                        .size(55.dp)
+                        .size(50.sdp())
                         .clip(CircleShape)
                         .background(
                             color = PrimaryDarkGreen
@@ -426,7 +548,7 @@ fun AiPromptBar(
                         painter = painterResource(id = R.drawable.ic_send),
                         contentDescription = "Send",
                         tint = Color.White,
-                        modifier = Modifier.size(25.dp)
+                        modifier = Modifier.size(22.sdp())
                     )
                 }
             }
@@ -441,12 +563,14 @@ fun AiPromptBar(
 fun ButtonRow(
     buttons: List<ButtonData>,
     modifier: Modifier = Modifier,
+    rowBackgroundColor: Color = Color.Transparent, // new parameter for Row background
     onClick: (ButtonType) -> Unit
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp),
+            .background(White) // apply Row background
+            .padding(horizontal = 8.sdp()),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         buttons.forEach { btn ->
@@ -454,6 +578,9 @@ fun ButtonRow(
                 modifier = Modifier
                     .weight(1f) // equally divide width
                     .padding(horizontal = 4.dp)
+                    .background(
+                        color = White
+                    )
             ) {
                 MainButton(
                     title = btn.title,
@@ -473,6 +600,7 @@ fun MainButton(
 ) {
     Column(
         modifier = Modifier
+            .background(White)
             .clickable(onClick = onClick)
             .padding(vertical = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -481,22 +609,37 @@ fun MainButton(
         Image(
             painter = painterResource(id = imageRes),
             contentDescription = title,
-            modifier = Modifier.size(75.sdp())
+            modifier = Modifier
+                .size(70.sdp())
+                .background(White.copy(alpha = 0.5f))
         )
-
-        Spacer(modifier = Modifier.height(4.dp))
+//        Spacer(modifier = Modifier
+//            .fillMaxWidth()
+//            .height(4.dp)
+//            .background(Yellow.copy(alpha = 0.5f))
+//        )
 
         Text(
             text = title,
             textAlign = TextAlign.Center,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
-            fontSize = 12.sp,
-            fontFamily = Montserrat,
-            fontWeight = FontWeight.Medium,
-            color = Color.Black,
-            modifier = Modifier.fillMaxWidth()
+            style = TextStyle(
+                fontSize = 10.ssp(),
+                fontFamily = Montserrat,
+                fontWeight = FontWeight.Medium,
+                color = Color.Black,
+                lineHeight = 12.ssp(),
+                lineHeightStyle = LineHeightStyle(
+                    alignment = LineHeightStyle.Alignment.Center,
+                    trim = LineHeightStyle.Trim.Both
+                )
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(White.copy(alpha = 0.5f))
         )
+
     }
 }
 

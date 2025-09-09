@@ -17,6 +17,11 @@ import androidx.lifecycle.*
 import com.cit.mycomposeapplication.models.Prayer
 import com.cit.mycomposeapplication.models.PrayerUiState
 import com.cit.mycomposeapplication.repository.LocationRepository
+import com.cit.mycomposeapplication.ui.theme.BgtobarColorAsar
+import com.cit.mycomposeapplication.ui.theme.BgtobarColorFajr
+import com.cit.mycomposeapplication.ui.theme.BgtobarColorIsha
+import com.cit.mycomposeapplication.ui.theme.BgtobarColorMagrib
+import com.cit.mycomposeapplication.ui.theme.BgtobarColorZuhar
 import com.cit.mycomposeapplication.utils.AppSettings
 import com.cit.mycomposeapplication.utils.Constants
 import com.cit.mycomposeapplication.utils.PrayTime
@@ -362,7 +367,7 @@ open class LocationViewModel(application: Application) : AndroidViewModel(applic
     ): Pair<PrayerUiState, Calendar?> {
 
         var isBlack = true
-        var statusBarColor: Int? = null
+        var statusBarColor: Color? = null
         var backgroundRes: Brush? = null
         var toolbarRes: Int? = null
         var vectorRes: Int? = null
@@ -379,10 +384,11 @@ open class LocationViewModel(application: Application) : AndroidViewModel(applic
                 nextPrayerTimeCalendr =
                     convertTimeStringToCalendarFajarNext(nextPrayerTime2!!, prayerTimes[Constants.ISHA]!!)
 
-                statusBarColor = R.color.bgtobarcolorfajr
+                statusBarColor = BgtobarColorFajr
                 backgroundRes = Brush.verticalGradient(colors = listOf(
-                    Color(0xFFE2C7CC),
-                    Color(0x00000000)))
+                    Color(0x00000000),
+                    Color(0xFFE2C7CC)
+                ))
                 toolbarRes = R.drawable.maintoolbarfajar
                 vectorRes = R.drawable.status_bar_mosque_svg
                 isBlack = true
@@ -393,11 +399,11 @@ open class LocationViewModel(application: Application) : AndroidViewModel(applic
                 nextPrayerTimeCalendr =
                     convertTimeStringToCalendar(nextPrayerTime2!!, Constants.TODAY)
 
-                statusBarColor = R.color.bgtobarcolorzuhar
+                statusBarColor = BgtobarColorZuhar
                 backgroundRes = Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFF80CCE4), // startColor
-                        Color(0x00000000)  // endColor transparent
+                        Color(0x00000000),  // top color  transparent
+                        Color(0xFF80CCE4) // bottom color
                     )
                 )
 
@@ -411,11 +417,11 @@ open class LocationViewModel(application: Application) : AndroidViewModel(applic
                 nextPrayerTimeCalendr =
                     convertTimeStringToCalendar(nextPrayerTime2!!, Constants.TODAY)
 
-                statusBarColor = R.color.bgtobarcolorzuhar
+                statusBarColor = BgtobarColorZuhar
                 backgroundRes = Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFF80CCE4),   // startColor
-                        Color(0x00000000)    // endColor (transparent)
+                        Color(0x00000000),    // endColor (transparent)
+                        Color(0xFF80CCE4)   // startColor
                     )
                 )
                 toolbarRes = R.drawable.maintoolbarzuhar
@@ -428,7 +434,7 @@ open class LocationViewModel(application: Application) : AndroidViewModel(applic
                 nextPrayerTimeCalendr =
                     convertTimeStringToCalendar(nextPrayerTime2!!, Constants.TODAY)
 
-                statusBarColor = R.color.bgtobarcolorasar
+                statusBarColor = BgtobarColorAsar
                 backgroundRes = Brush.verticalGradient(
                     colors = listOf(
                         Color(0x00000000), // startColor (transparent)
@@ -446,7 +452,7 @@ open class LocationViewModel(application: Application) : AndroidViewModel(applic
                 nextPrayerTimeCalendr =
                     convertTimeStringToCalendar(nextPrayerTime2!!, Constants.TODAY)
 
-                statusBarColor = R.color.bgtobarcolormagrib
+                statusBarColor = BgtobarColorMagrib
                 backgroundRes = Brush.verticalGradient(
                     colors = listOf(
                         Color(0xFF503B5D),  // startColor
@@ -463,7 +469,7 @@ open class LocationViewModel(application: Application) : AndroidViewModel(applic
                 nextPrayerTimeCalendr =
                     convertTimeStringToCalendar(nextPrayerTime2!!, Constants.TODAY)
 
-                statusBarColor = R.color.bgtobarcolorisha
+                statusBarColor = BgtobarColorIsha
                 backgroundRes = Brush.horizontalGradient(
                     colors = listOf(
                         Color(0xFF374554), // startColor (left)
@@ -478,11 +484,12 @@ open class LocationViewModel(application: Application) : AndroidViewModel(applic
             else -> {
                 nextPrayer = Constants.FAJR
                 nextPrayerTime2 = prayerTimes[nextPrayer]
-                nextPrayerTimeCalendr =
-                    convertTimeStringToCalendar(nextPrayerTime2!!, Constants.NEXTDAY)
-
-                statusBarColor = R.color.bgtobarcolorfajr
-                backgroundRes = Brush.verticalGradient(colors = listOf(Color(0xFFE2C7CC), Color(0x00000000)))
+                nextPrayerTimeCalendr = convertTimeStringToCalendar(nextPrayerTime2!!, Constants.NEXTDAY)
+                statusBarColor = BgtobarColorFajr
+                backgroundRes = Brush.verticalGradient(colors = listOf(
+                    Color(0x00000000),
+                    Color(0xFFE2C7CC)
+                ))
                 toolbarRes = R.drawable.maintoolbarfajar
                 vectorRes = R.drawable.status_bar_mosque_svg
                 isBlack = true
