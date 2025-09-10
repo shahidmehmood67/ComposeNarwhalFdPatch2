@@ -65,34 +65,33 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation("androidx.activity:activity-ktx:1.10.1")
+    implementation(libs.androidx.activity.ktx)
 
-    // Pager (official foundation pager)
-    implementation("androidx.compose.foundation:foundation:1.9.0")
-// Lifecycle / ViewModel + Coroutines
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
+    // Pager (Compose foundation)
+    implementation(libs.androidx.compose.foundation)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2")
+    // Lifecycle / ViewModel + Coroutines
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.play.services)
 
-    implementation("androidx.compose.runtime:runtime-livedata:1.8.3")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.2")
+    // LiveData in Compose
+    implementation(libs.androidx.compose.runtime.livedata)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
-    implementation("com.google.android.gms:play-services-location:21.2.0")
+    // Play Services
+    implementation(libs.play.services.location)
 
-    // Ktor Core
-    implementation("io.ktor:ktor-client-core:2.0.0")
-//    implementation("io.ktor:ktor-client-cio:2.0.0")
-    implementation("io.ktor:ktor-client-okhttp:2.0.0")
-    
-    // JSON Serialization
-    implementation("io.ktor:ktor-client-content-negotiation:2.0.0")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:2.0.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+    // Ktor & JSON Serialization
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.kotlinx.serialization.json)
 
     // Play Core
-    implementation("com.google.android.play:asset-delivery-ktx:2.2.2")
+    implementation(libs.play.asset.delivery.ktx)
 
     // Others
-    implementation("com.airbnb.android:lottie:6.4.0")
+    implementation(libs.lottie)
 }
