@@ -66,7 +66,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation("androidx.activity:activity-ktx:1.10.1")
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.1")
 
     // Pager (official foundation pager)
     implementation("androidx.compose.foundation:foundation:1.9.0")
@@ -96,6 +95,4 @@ dependencies {
 
     // Others
     implementation("com.airbnb.android:lottie:6.4.0")
-
-    implementation("com.intuit.sdp:sdp-android:1.1.1")
 }
