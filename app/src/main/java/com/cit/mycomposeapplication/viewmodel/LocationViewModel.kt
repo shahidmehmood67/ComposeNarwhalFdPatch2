@@ -435,11 +435,11 @@ open class LocationViewModel(application: Application) : AndroidViewModel(applic
                     convertTimeStringToCalendar(nextPrayerTime2!!, Constants.TODAY)
 
                 statusBarColor = BgtobarColorAsar
-                backgroundRes = Brush.verticalGradient(
+                backgroundRes = Brush.horizontalGradient(
                     colors = listOf(
-                        Color(0x00000000), // startColor (transparent)
+                        Color(0xFFE5F0B7),  // startColor
                         Color(0xFFAFDAD8), // centerColor
-                        Color(0xFFE5F0B7)  // endColor
+                        Color(0x00000000) // endColor (transparent)
                     )
                 )
                 toolbarRes = R.drawable.maintoolbarasar
@@ -472,9 +472,9 @@ open class LocationViewModel(application: Application) : AndroidViewModel(applic
                 statusBarColor = BgtobarColorIsha
                 backgroundRes = Brush.horizontalGradient(
                     colors = listOf(
-                        Color(0xFF374554), // startColor (left)
+                        Color(0xFF4D5B6A),  // startColor (left)
                         Color(0xFF475564), // centerColor (middle)
-                        Color(0xFF4D5B6A)  // endColor (right)
+                        Color(0xFF374554) //  endColor  (right)
                     )
                 )
                 toolbarRes = R.drawable.maintoolbarisha

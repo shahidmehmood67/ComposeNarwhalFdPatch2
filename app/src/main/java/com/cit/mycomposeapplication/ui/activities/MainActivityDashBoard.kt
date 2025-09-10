@@ -240,6 +240,16 @@ class MainActivityDashBoard : ComponentActivity() {
                     }
                 } else {
                     Log.e(" MainActivityDashBoard", " onRequestPermissionsResult: 1607 ")
+                    // Step 1: Check/request location permission
+                    if (locationViewModel.isPermissionGranted()) {
+                        locationViewModel.requestLocationUpdates()
+                        locationViewModel.fetchUserLocation()
+                        observeUserLocation()
+                    } else {
+                        requestLocationpermission()
+                    }
+                    checkCopyDB()
+                    viewModelAyah.fetchAyah()
                 }
             }
 

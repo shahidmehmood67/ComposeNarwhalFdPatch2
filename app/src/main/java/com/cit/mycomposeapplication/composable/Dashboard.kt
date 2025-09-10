@@ -61,6 +61,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cit.mycomposeapplication.database.AyahUiState
 import com.cit.mycomposeapplication.models.ButtonData
@@ -217,7 +218,7 @@ fun MainHeader(
 
                 HeaderTopRow(locationText ?: "null",uiState, onSendMessage, onSendMessage , R.raw.crownanim)
 
-                Spacer(modifier = Modifier.height(20.sdp()))
+                Spacer(modifier = Modifier.height(12.sdp()))
 
 
                 Column(
@@ -284,16 +285,16 @@ fun MainHeader(
         }
 
 
-        Spacer(modifier = Modifier.height(9.sdp()))
+        Spacer(modifier = Modifier.height(4.sdp()))
 
         AiPromptBar(
             onClick = onSendMessage
         )
 
-        Spacer(modifier = Modifier
-            .fillMaxWidth()
-            .height(5.sdp())
-            .background(White))
+//        Spacer(modifier = Modifier
+//            .fillMaxWidth()
+//            .height(3.sdp())
+//            .background(White))
 
 
         // First Row of buttons
@@ -301,7 +302,7 @@ fun MainHeader(
 
         Spacer(modifier = Modifier
             .fillMaxWidth()
-            .height(12.sdp())
+            .height(8.sdp())
             .background(White))
 
         // Second Row of buttons
@@ -309,7 +310,7 @@ fun MainHeader(
 
         Spacer(modifier = Modifier
             .fillMaxWidth()
-            .height(12.sdp())
+            .height(8.sdp())
             .background(White)
         )
 
@@ -318,19 +319,18 @@ fun MainHeader(
 
         Spacer(modifier = Modifier
             .fillMaxWidth()
-            .height(12.sdp())
+            .height(8.sdp())
             .background(White))
 
         AyahCardSection(ayahViewModel, onButtonClick)
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(8.sdp()))
 
         TasbeehCardSection(ayahViewModel, onButtonClick)
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(13.sdp()))
 
         ReciterSection(reciterViewModel, onReciterClick)
-
 
 
         // 🔹 Add bottom space
@@ -370,7 +370,7 @@ fun HeaderTopRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 4.dp),
+            .padding(horizontal = 12.dp, vertical = 17.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Menu Button
@@ -387,13 +387,13 @@ fun HeaderTopRow(
         }
 
 
-        Spacer(modifier = Modifier.width(24.dp))
+        Spacer(modifier = Modifier.width(22.sdp()))
 
         // Location Card
         Card(
             modifier = Modifier
                 .weight(1f)
-                .height(35.dp)
+                .height(34.dp)
                 .clickable { onLocationClick() },
             shape = RoundedCornerShape(25.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
@@ -401,7 +401,7 @@ fun HeaderTopRow(
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxHeight()
                     .background(
                         brush = uiState.backgroundResBrush ?: Brush.verticalGradient(
                             colors = listOf(
@@ -409,16 +409,16 @@ fun HeaderTopRow(
                                 Color(0x00000000)  // fallback bottom color (transparent)
                             )
                         ),
-                        shape = RoundedCornerShape(20.dp)
+                        shape = RoundedCornerShape(35.dp)
                     )
-                    .padding(horizontal = 8.dp),
+                    .padding(start = 8.dp, end = 14.dp),
                 contentAlignment = Alignment.CenterStart
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_yellow_loc),
                         contentDescription = null,
-                        modifier = Modifier.size(20.dp),
+                        modifier = Modifier.size(21.dp),
                         tint = if (uiState.isBlack) Color.Black else Color.White
                     )
 
@@ -430,8 +430,7 @@ fun HeaderTopRow(
                         text = locationText ?: "Unknown",
                         color = if (uiState.isBlack) Color.Black else Color.White,
                         fontSize = 11.ssp(),
-                        fontFamily = Montserrat,
-                        fontWeight = FontWeight.Medium,
+                        fontWeight = FontWeight.Normal,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -484,23 +483,23 @@ fun AiPromptBar(
     ) {
         Card(
             modifier = Modifier
-                .fillMaxWidth(0.9f)
+                .fillMaxWidth(0.92f)
                 .padding(vertical = 6.sdp())
                 .clickable { onClick() }, // Main card click
             shape = RoundedCornerShape(12.dp),
-            elevation = CardDefaults.cardElevation(3.dp),
+            elevation = CardDefaults.cardElevation(2.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(horizontal = 10.sdp())
+                modifier = Modifier.padding(vertical = 6.sdp(), horizontal = 10.sdp())
             ) {
                 Card(
                     shape = RoundedCornerShape(35.dp),
                     border = BorderStroke(1.dp, Green_1),
                     modifier = Modifier
                         .weight(1f)
-                        .height(46.dp), // card height
+                        .height(50.dp), // card height
                     colors = CardDefaults.cardColors(
                         containerColor = Color.White // 🔹 White background
                     )
@@ -532,12 +531,12 @@ fun AiPromptBar(
                 }
 
 
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(8.sdp()))
 
                 // Send button with gradient (unchanged)
                 Box(
                     modifier = Modifier
-                        .size(50.sdp())
+                        .size(48.sdp())
                         .clip(CircleShape)
                         .background(
                             color = PrimaryDarkGreen
@@ -548,7 +547,7 @@ fun AiPromptBar(
                         painter = painterResource(id = R.drawable.ic_send),
                         contentDescription = "Send",
                         tint = Color.White,
-                        modifier = Modifier.size(22.sdp())
+                        modifier = Modifier.size(21.sdp())
                     )
                 }
             }
@@ -570,7 +569,7 @@ fun ButtonRow(
         modifier = modifier
             .fillMaxWidth()
             .background(White) // apply Row background
-            .padding(horizontal = 8.sdp()),
+            .padding(horizontal = 6.sdp()),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         buttons.forEach { btn ->
@@ -702,7 +701,7 @@ fun AyatOfTheDayCard(
                     text = stringResource(id = R.string.ayatofday),
                     fontFamily = Montserrat,
                     fontWeight = FontWeight.Medium,
-                    fontSize = 12.sp,
+                    fontSize = 12.ssp(),
                     color = Color.Black
                 )
 
@@ -710,7 +709,7 @@ fun AyatOfTheDayCard(
                     text = ayahUiState.textArabic,
                     fontFamily = majeedFont,
                     fontWeight = FontWeight.Normal,
-                    fontSize = 18.sp,
+                    fontSize = 16.ssp(),
                     color = PrimaryDarkGreen,
                     modifier = Modifier
                         .padding(horizontal = 10.dp, vertical = 8.dp)
@@ -727,7 +726,7 @@ fun AyatOfTheDayCard(
                     style = TextStyle(
                         fontFamily = Montserrat,
                         fontWeight = FontWeight.Medium,
-                        fontSize = 12.sp,
+                        fontSize = 11.ssp(),
                         color = Color.Black
                     )
                 )
@@ -770,13 +769,13 @@ fun TasbeehOfTheDayCard(
                     text = stringResource(id = R.string.tasbeehofday),
                     fontFamily = Montserrat,
                     fontWeight = FontWeight.Medium,
-                    fontSize = 12.sp,
+                    fontSize = 12.ssp(),
                     color = Color.Black
                 )
 
                 Row(
                     modifier = Modifier
-                        .padding(top = 10.dp)
+                        .padding(top = 10.sdp())
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -785,13 +784,13 @@ fun TasbeehOfTheDayCard(
                         contentDescription = null,
                         modifier = Modifier
                             .size(70.sdp())
-                            .padding(start = 5.dp)
+                            .padding(start = 5.sdp())
                     )
 
                     Text(
                         text = tasbeehUiState,
                         fontFamily = majeedFont,
-                        fontSize = 18.sp,
+                        fontSize = 16.ssp(),
                         fontWeight = FontWeight.Normal,
                         color = PrimaryDarkGreen,
                         textAlign = TextAlign.End,              // align to end of its full width
@@ -821,28 +820,28 @@ fun ViewMoreButton(
 ) {
     Row(
         modifier = Modifier
-            .padding(top = 6.dp)
+            .padding(top = 6.sdp())
             .background(
                 color = WhiteGrey,
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(8.dp)
             )
             .clickable { onButtonClick(buttontype) }
-            .padding(horizontal = 7.dp, vertical = 8.dp),
+            .padding(horizontal = 7.sdp(), vertical = 6.sdp()),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_viewmore),
             contentDescription = null,
-            modifier = Modifier.size(18.dp),
+            modifier = Modifier.size(18.sdp()),
             tint = Color.Unspecified
         )
         Text(
             text = text,
             fontFamily = Montserrat,
             fontWeight = FontWeight.Medium,
-            fontSize = 9.sp,
+            fontSize = 9.ssp(),
             color = Color.Black,
-            modifier = Modifier.padding(start = 3.dp)
+            modifier = Modifier.padding(start = 3.sdp())
         )
     }
 }
@@ -858,18 +857,19 @@ fun ReciterSection(
         modifier = Modifier.fillMaxWidth()) {
         Text(
             text = "Reciters:",
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(start = 10.dp, top = 5.dp)
+            fontSize = 12.ssp(),
+            fontFamily = Montserrat,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.padding(start = 10.sdp(), top = 5.sdp())
         )
 
         LazyRow(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(130.dp)
-                .padding(top = 5.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(horizontal = 10.dp)
+                .height(90.sdp())
+                .padding(top = 5.sdp()),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            contentPadding = PaddingValues(horizontal = 8.dp)
         ) {
             items(reciters) { reciter ->
                 ReciterCard(reciter) { onReciterClick(it) }
@@ -885,8 +885,8 @@ fun ReciterCard(
 ) {
     Column(
         modifier = Modifier
-            .width(90.dp)
-            .height(125.dp)
+            .width(90.sdp())
+            .height(80.sdp())
             .clickable { onClick(reciter.reader) }
             .padding(4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -895,26 +895,29 @@ fun ReciterCard(
             painter = painterResource(id = reciter.imageRes),
             contentDescription = reciter.reader.readerNameEnglish,
             modifier = Modifier
-                .size(75.sdp())
+                .size(50.sdp())
         )
-
-        val density = LocalDensity.current
-        val maxHeight = with(density) { (14.sp.toPx() * 2).toDp() } // 2 lines × lineHeight
 
         Text(
             text = reciter.reader.readerNameEnglish,
-            fontSize = 11.sp,
-            fontWeight = FontWeight.Medium,
-            color = Color.Black,
+            textAlign = TextAlign.Center,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
-            textAlign = TextAlign.Center,
-            lineHeight = 14.sp,
+            style = TextStyle(
+                fontSize = 10.ssp(),
+                fontFamily = Montserrat,
+                fontWeight = FontWeight.Medium,
+                color = Color.Black,
+                lineHeight = 11.ssp(),
+                lineHeightStyle = LineHeightStyle(
+                    alignment = LineHeightStyle.Alignment.Center,
+                    trim = LineHeightStyle.Trim.Both
+                )
+            ),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 4.dp)
-                .heightIn(max = maxHeight)
         )
+
     }
 }
 
