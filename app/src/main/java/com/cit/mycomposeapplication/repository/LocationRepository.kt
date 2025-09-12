@@ -57,45 +57,6 @@ class LocationRepository(private val context: Context) {
         }
     }
 
-    private suspend fun geocodeLocation(location: Location): LocationData = withContext(Dispatchers.IO) {
-        val geocoder = Geocoder(context, Locale.getDefault())
-        var addressText: String? = null
-
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                // For Android 13+ use the new API
-//                geocoder.getFromLocation(location.latitude, location.longitude, 1) { addresses ->
-//                    addressText = formatAddress(addresses.firstOrNull())
-//                }
-                addressText = suspendCoroutine { continuation ->
-                    geocoder.getFromLocation(location.latitude, location.longitude, 1) { addresses ->
-                        val formattedAddress = formatAddress(addresses.firstOrNull())
-                        continuation.resume(formattedAddress)
-                    }
-                }
-
-            } else {
-                // For older Android versions
-                @Suppress("DEPRECATION")
-                val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                addressText = formatAddress(addresses?.firstOrNull())
-            }
-        } catch (e: IOException) {
-            Log.e("TAG", "Geocoder error", e)
-            addressText = "Unable to determine address"
-        } catch (e: Exception) {
-            Log.e("TAG", "General geocoding error", e)
-            addressText = "Error getting location name"
-        }
-
-        return@withContext LocationData(
-            latitude = location.latitude,
-            longitude = location.longitude,
-            address = addressText,
-            timestamp = System.currentTimeMillis()
-        )
-    }
-
     private fun formatAddress(address: Address?): String {
         if (address == null) return "Unknown location"
 
@@ -149,5 +110,47 @@ class LocationRepository(private val context: Context) {
             }
         }
     }
+
+
+    private suspend fun geocodeLocation(location: Location): LocationData = withContext(Dispatchers.IO) {
+        val geocoder = Geocoder(context, Locale.getDefault())
+        var addressText: String? = null
+
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                // For Android 13+ use the new API
+//                geocoder.getFromLocation(location.latitude, location.longitude, 1) { addresses ->
+//                    addressText = formatAddress(addresses.firstOrNull())
+//                }
+                addressText = suspendCoroutine { continuation ->
+                    geocoder.getFromLocation(location.latitude, location.longitude, 1) { addresses ->
+                        val formattedAddress = formatAddress(addresses.firstOrNull())
+                        continuation.resume(formattedAddress)
+                    }
+                }
+
+            } else {
+                // For older Android versions
+                @Suppress("DEPRECATION")
+                val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                addressText = formatAddress(addresses?.firstOrNull())
+            }
+        } catch (e: IOException) {
+            Log.e("TAG", "Geocoder error", e)
+            addressText = "Unable to determine address"
+        } catch (e: Exception) {
+            Log.e("TAG", "General geocoding error", e)
+            addressText = "Error getting location name"
+        }
+
+        return@withContext LocationData(
+            latitude = location.latitude,
+            longitude = location.longitude,
+            address = addressText,
+            timestamp = System.currentTimeMillis()
+        )
+    }
+
+
 }
 

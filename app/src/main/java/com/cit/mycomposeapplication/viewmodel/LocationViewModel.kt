@@ -52,8 +52,6 @@ open class LocationViewModel(application: Application) : AndroidViewModel(applic
     private val _userLocation = MutableLiveData<Location?>()
     val userLocation: LiveData<Location?> get() = _userLocation
 
-    var gotosettings = false
-
     fun requestLocationUpdates() {
         viewModelScope.launch(Dispatchers.IO) {
             repository.getLocationFlow().collect { location ->
